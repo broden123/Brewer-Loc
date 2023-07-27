@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Search Music!</title>
+    <title>Brew-Loc</title>
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
@@ -12,7 +12,9 @@
   <body>
     <img id="image" src="" alt="">
     <header>
-      <h1 class="columns is-centered">Brewery</h1>
+      <div>
+        <h1 class="title">Brew Finder</h1>
+      </div>
       <nav class="breadcrumb is-right" aria-label="breadcrumbs">
         <ul>
           <li><a href="#home">Home</a></li>
@@ -29,15 +31,18 @@
       <article class="media">
         <div class="media-left">
           <button class="image is-32x32">
-            <img
-              src="/assets/spotify-icon-22.png"
-              alt="Spotify Logo"
+            <img 
+              src="/assets/pexels-isabella-mendes-338711.jpg"
+              alt="beer beer-icon"
             />
           </button>
         </div>
         <div class="media-content">
           <div class="content">
             <p>
+              <strong>Brewery name</strong> 
+              <br />
+              <div id="brew">Brewery city</div>
               <strong>Brewery: </strong> <small>City: </small>
               <br />
               <div id="lyrics">This is where the list of breweries will be</div>
