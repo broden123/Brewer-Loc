@@ -1,12 +1,7 @@
 const MAP_API_KEY = "Z2Olh8AiDpkye0o27ii8yHGpfXPmDkci";
 let buttonEl = document.querySelector(".button");
 let inputEl = document.querySelector(".textinput");
-
-// let dropDownEl = document.querySelector(".dropdown")
-// let button2El = document.querySelector(".button2")
-// let states = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Federated States of Micronesia','Florida','Georgia','Guam','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Marshall Islands','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Northern Mariana Islands','Ohio','Oklahoma','Oregon','Palau','Pennsylvania','Puerto Rico','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virgin Island','Virginia','Washington','West Virginia','Wisconsin','Wyoming']
-// button2El.addEventListener('click', )
-
+let dropDownEl = document.querySelector(".ddstate")
 let loc = "";
 let searchedCities = [];
 
@@ -44,35 +39,39 @@ function InitiateBreweryUI(data) {
 }
 
 // gets data from breweryAPI lat and lon
-function getMap(data) {
-  let locations = inputEl.value;
-  for (i = 0; i < data.length; i++) {
-    if (data[i].latitude !== null && data[i].longitude !== null) {
-      locations += `||${data[i].latitude},${data[i].longitude}`;
-    }
-  }
-  // filters location
-  let filter = `&locations=${locations}`;
-  let mapApiUrl = `https://www.mapquestapi.com/staticmap/v5/map?key=${MAP_API_KEY}${filter}`;
-  fetch(mapApiUrl)
-    .then(function (response) {
-      return response.blob();
-    })
-    .then(function (data) {
-      const image = document.querySelector("#bigSingleMap");
+// function getMap(data) {
+//   let locations = inputEl.value;
+//   for (i = 0; i < data.length; i++) {
+//     if (data[i].latitude !== null && data[i].longitude !== null) {
+//       locations += `||${data[i].latitude},${data[i].longitude}`;
+//     }
+//   }
+//   // filters location
+//   let filter = `&locations=${locations}`;
+//   let mapApiUrl = `https://www.mapquestapi.com/staticmap/v5/map?key=${MAP_API_KEY}${filter}`;
 
-      image.setAttribute("src", URL.createObjectURL(data));
-      console.log(data);
-    });
-}
+
+//   fetch(mapApiUrl)
+//     .then(function (response) {
+//       return response.blob();
+//     })
+//     .then(function (data) {
+//       const image = document.querySelector("#bigSingleMap");
+
+//       image.setAttribute("src", URL.createObjectURL(data));
+//       console.log(data);
+//     });
+// }
 
 function brew() {
+
   if (inputEl.value !== "") {
     fetch(
-      `https://api.openbrewerydb.org/v1/breweries?by_city=${inputEl.value}&per_page=15`
-      // &by_state=${states.value}
-    )
+      `https://api.openbrewerydb.org/v1/breweries?by_city=${inputEl.value}&by_state=${dropDownEl.value}&per_page=50`
+     
+    ) 
       .then(function (response) {
+        
         return response.json();
       })
       .then(function (data) {
@@ -85,15 +84,19 @@ function brew() {
         var mapDrawLocations = [];
         var breweryNames = [];
         for (i = 0; i < data.length; i++) {
-          var addressConcate =
-            data[i].address_1 + " " + data[i].city + " " + data[i].state;
+          if (data[i].address_1 == null){data[i].address_1 = ""}
+          var addressConcate = data[i].address_1.replace('#','') + " " + data[i].city + " " + data[i].state;
           mapDrawLocations.push(addressConcate.concat());
           var nameConcate = data[i].name;
           breweryNames.push(nameConcate.concat());
+          
+
           // mapDrawLocations.push(subArrayTwo.concat());
         }
+        
         console.log(mapDrawLocations);
         console.log(breweryNames);
+        
         //
         MQ.geocode()
           .search(mapDrawLocations)
@@ -169,50 +172,59 @@ function brew() {
           "searchedCities",
           JSON.stringify(filteredSearchHistory)
         );
-        // run api fetch function
-
-        //experimenting - ignore
-        //   for (j = 0; j < 10; j++) {
-        //    for(i = 0; i < 2; i++ ){
-        //     if (data[j].street !== null) {
-
-        //     loc = data[i].street + "," + data[i].state
-        //     getApi(loc,i);
-        //   }}
-        // }
+init()
       });
   } else {
     alert("please enter a city");
   }
 }
-
-// this is the static location data
-
-// function getApi() {
-//   fetch(
-
-//   )
-//     .then(function (response) {
-//       console.log(response);
-//       return response.blob();
-//     })
-//     // this returns the image data
-//     .then(function (data) {
-//       const image = document.querySelector("#image" + i);
-
-//       image.setAttribute("src", URL.createObjectURL(data));
-//       console.log(data);
-//     });
-// }
 buttonEl.addEventListener("click", brew);
 
 function init() {
   // load search history on page load
   var data = localStorage.getItem("searchedCities");
   var searchedCities = data ? JSON.parse(data) : [];
+console.log(searchedCities);
+let historyCitiesEl = document.querySelector(".historyCities")
+historyCitiesEl.textContent ='';
   if (searchedCities.value !== "") {
     for (i = 0; i < searchedCities.length; i++) {
       //add .append for each index of string here
+      
+      let divElh = document.createElement("div");
+      divElh.setAttribute('class','m-5')
+      divElh.setAttribute('id',searchedCities[i])
+      historyCitiesEl.appendChild(divElh)
+      divElh.textContent = searchedCities[i]
+
+      divElh.addEventListener("click",function(){
+        console.log(this.textContent)
+      })
     }
   }
+
+  
+
 }
+
+init()
+
+// let historyArray = [];
+
+// function renderHistory() {
+
+// let historyEl = document.querySelector('#history');
+
+// // historyEl.push(inputEl.value);
+// for (let index = 0; index < historyArray.length; index++) {
+//   let hist = historyArray[index];
+// }
+// ViewScore.addEventListener('click', function (){
+  
+//   console.log(ViewScore);
+// });
+// }
+
+
+
+
