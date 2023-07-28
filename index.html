@@ -1,105 +1,92 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Brew-Loc</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
-    />
-  </head>
-  <body>
-    <header>
-      <div>
-        <h1 class="title">Brew Finder</h1>
-      </div>
-      <nav class="breadcrumb is-right" aria-label="breadcrumbs">
-        <ul>
-          <li><a href="#home">Home</a></li>
-          <li><a href="#history">History</a></li>
-        </ul>
-      </nav>
-    </header>
-    <section class="columns is-centered">
-    <input class="textinput" placeholder="Type your City"></input>
-    <button class= "button" type="submit" value="Submit" >SUBMIT</button>
-    
-    </section>
-    <div class="box">
-      <article class="media">
-        <div class="media-left">
-          <section class="image is-48x48">
-            <img 
-              src="/assets/pexels-photo-1267700.webp"
 
-              alt="beer beer-icon"
-            />
-          </section>
-        </div>
-        <div class="media-content">
-          <div class="content">
-            <p>
-              <strong>Brewery name</strong> 
-              <br />
-              <div id="brew">Brewery city</div>
-              <strong>Brewery: </strong> <small>City: </small>
-              <br />
-              <div id="brew">Brewery city</div>
-            </p>
-          </div>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Brew-Loc</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+  <link rel="stylesheet" href="assets/style.css">
+
+</head>
+
+<body>
+
+  <header class="">
+    <nav class="breadcrumb is-right" aria-label="breadcrumbs">
+      <ul class="">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#history">History</a></li>
+      </ul>
+    </nav>
+    <div>
+      <h1 class="title is-1 columns is-centered m-5">Brew-Loc</h1>
+    </div>
+  </header>
+  <!-- <div class="dropdown is-active">
+    <div class="dropdown-trigger">
+      <button class="button2" aria-haspopup="true" aria-controls="dropdown-menu">
+        <span>Dropdown button</span>
+        <span class="icon is-small">
+          <i class="fas fa-angle-down" aria-hidden="true"></i>
+        </span>
+      </button>
+    </div> -->
+
+
+    <section class="columns is-centered m-6">
+      <input class="textinput " placeholder="Type your City"></input>
+      <button class="button" type="submit" value="Submit">SUBMIT</button>
+    </section>
+    <img id="bigSingleMap" class="columns is-centered">
+    </img>
+    <div id="brewerySection">
+    </div>
+    <!-- <div class="box">
+    <article class="media">
+      <div class="media-left">
+        <section class="image is-48x48">
+          <img src="/assets/pexels-photo-1267700.webp" alt="beer beer-icon" />
+        </section>
+      </div>
+      <div class="media-content">
+        <div class="content">
+          <p>
+            <strong>Brewery name</strong>
+            <br />
+          <div id="brew">Brewery city</div>
+          </p>
         </div>
         <div class="media-right">
           <section class="image is-128x128">
-        <img id="image" src="" alt="">
+            <img id="image1" src="" alt="">
+          </section>
+        </div>
+    </article>
+  </div> -->
+    <!-- <div class="box">
+    <article class="media">
+      <div class="media-left">
+        <section class="image is-48x48">
+          <img src="/assets/pexels-photo-1267700.webp" alt="beer beer-icon" />
         </section>
       </div>
-      </article>
-    </div>
-    <div class="box">
-      <article class="media">
-        <div class="media-left">
-          <section class="image is-48x48">
-            <img 
-              src="/assets/pexels-photo-1267700.webp"
-              alt="beer beer-icon"
-            />
-          </section>
-        </div>  
-        
-    <div class="media-content">
-      <div class="content">
-        <p>
-          <strong>Brewery name</strong> 
-          <br />
+      <div class="media-content">
+        <div class="content">
+          <p>
+            <strong>Brewery name</strong>
+            <br />
           <div id="brew">Brewery city</div>
-        </p>
-      </div>
-    </div>
-  </article>
-</div>
-<div class="box">
-  <article class="media">
-    <div class="media-left">
-      <section class="image is-48x48">
-        <img 
-          src="/assets/pexels-photo-1267700.webp"
-          alt="beer beer-icon"
-        />
-      </section>
-    </div>  
-    
-<div class="media-content">
-  <div class="content">
-    <p>
-      <strong>Brewery name</strong> 
-      <br />
-      <div id="brew">Brewery city</div>
-    </p>
-  </div>
-</div>
-</article>
-</div>
+          </p>
+        </div>
+        <div class="media-right">
+          <section class="image is-128x128">
+            <img id="image2" src="" alt="">
+          </section>
+        </div>
+    </article>
+  </div> -->
     <script src="assets/script.js"></script>
-  </body>
+</body>
+
 </html>
