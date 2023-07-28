@@ -83,18 +83,20 @@ function brew() {
         }
         // getMap(data);
         var mapDrawLocations = [];
-        var subArray = [];
+        var breweryNames = [];
         for (i = 0; i < data.length; i++) {
-          var mapDrawLocations = [];
           var addressConcate =
             data[i].address_1 + " " + data[i].city + " " + data[i].state;
-          subArray.push(addressConcate);
-          mapDrawLocations.push(subArray.concat());
+          mapDrawLocations.push(addressConcate.concat());
+          var nameConcate = data[i].name;
+          breweryNames.push(nameConcate.concat());
+          // mapDrawLocations.push(subArrayTwo.concat());
         }
         console.log(mapDrawLocations);
+        console.log(breweryNames);
         //
         MQ.geocode()
-          .search(mapDrawLocations[0])
+          .search(mapDrawLocations)
           .on("success", function (e) {
             var results = e.result,
               html = "",
@@ -117,6 +119,7 @@ function brew() {
             for (i = 0; i < results.length; i++) {
               result = results[i].best;
               latlng = result.latlng;
+              brewName = breweryNames[i];
 
               html += '<div style="width:300px; float:left;">';
               html +=
@@ -140,7 +143,7 @@ function brew() {
 
               // create POI markers for each location
               marker = L.marker([latlng.lat, latlng.lng]).bindPopup(
-                result.adminArea5 + ", " + result.adminArea3
+                "<strong>" + brewName + "</strong>" + "</br>" + result.street
               );
 
               group.push(marker);
