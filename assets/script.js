@@ -5,11 +5,13 @@ let dropDownEl = document.querySelector(".ddstate")
 let loc = "";
 let searchedCities = [];
 let mapEl = document.querySelector('#map');
+
+
 function InitiateBreweryUI(data) {
-  const brewerySectionDiv = document.getElementById("brewerySection");
+  const brewerySectionDiv = $("#brewerySection");
 
   for (i = 0; i < data.length; i++) {
-    brewerySectionDiv.innerHTML += `
+    brewerySectionDiv.append(`
       <div class="box">
         <article class="media">
           <div class="media-left">
@@ -22,9 +24,8 @@ function InitiateBreweryUI(data) {
               <p>
                 <strong>Name: ${data[i].name}</strong>
                 <br />
-              <div id="brew">Street: ${
-                data[i].street ? data[i].street : "Unavaliable"
-              }</div>
+              <div id="brew">Street: ${data[i].street ? data[i].street : "Unavaliable"
+      }</div>
               </p>
             </div>
             <div class="media-right">
@@ -34,77 +35,70 @@ function InitiateBreweryUI(data) {
             </div>
         </article>
       </div>
-    `;
+    `)
   }
 }
 
-// gets data from breweryAPI lat and lon
-// function getMap(data) {
-//   let locations = inputEl.value;
-//   for (i = 0; i < data.length; i++) {
-//     if (data[i].latitude !== null && data[i].longitude !== null) {
-//       locations += `||${data[i].latitude},${data[i].longitude}`;
-//     }
-//   }
-//   // filters location
-//   let filter = `&locations=${locations}`;
-//   let mapApiUrl = `https://www.mapquestapi.com/staticmap/v5/map?key=${MAP_API_KEY}${filter}`;
-
-
-//   fetch(mapApiUrl)
-//     .then(function (response) {
-//       return response.blob();
-//     })
-//     .then(function (data) {
-//       const image = document.querySelector("#bigSingleMap");
-
-//       image.setAttribute("src", URL.createObjectURL(data));
-//       console.log(data);
-//     });
-// }
-
 function brew() {
+
 
   if (inputEl.value !== "") {
     fetch(
       `https://api.openbrewerydb.org/v1/breweries?by_city=${inputEl.value}&by_state=${dropDownEl.value}&per_page=50`
-     
-    ) 
+
+    )
       .then(function (response) {
-        
+
         return response.json();
       })
       .then(function (data) {
+
+        //if the search returns nothing, warning modal
+        if (data.length == 0) {
+          console.log('hi')
+          let popupEl = $('.popupHolder');
+          popupEl.append(` <div class="notification  is-warning"><button class="delete"></button>
+         Please enter a 
+          <strong> valid </strong>, 
+          city name.</div>`)
+
+          //clicking x removes notification:
+          $(".delete").on('click', function () {
+            $(".notification").remove()
+          })
+          return;
+        }
+
         if (data) {
           // console.log(data);
 
           InitiateBreweryUI(data);
-          
+
         }
-        
+
         // getMap(data);
         var mapDrawLocations = [];
         var breweryNames = [];
         for (i = 0; i < data.length; i++) {
-          if (data[i].address_1 == null){data[i].address_1 = ""}
-          var addressConcate = data[i].address_1.replace('#','') + " " + data[i].city + " " + data[i].state;
+          if (data[i].address_1 == null) { data[i].address_1 = "" }
+          var addressConcate = data[i].address_1.replace('#', '') + " " + data[i].city + " " + data[i].state;
           mapDrawLocations.push(addressConcate.concat());
           var nameConcate = data[i].name;
           breweryNames.push(nameConcate.concat());
-          
-          inputEl.textContent = ''; 
+
+          inputEl.textContent = '';
           // mapDrawLocations.push(subArrayTwo.concat());
         }
-        
+
         // console.log(mapDrawLocations);
         // console.log(breweryNames);
-      
+
         //
-       
+
         MQ.geocode()
           .search(mapDrawLocations)
           .on("success", function (e) {
-           
+
 
             var results = e.result,
               html = "",
@@ -119,12 +113,12 @@ function brew() {
               map,
               r,
               i;
-              
+
             map = L.map("map", {
-              
+
               layers: MQ.mapLayer(),
             });
-           
+
             for (i = 0; i < results.length; i++) {
               result = results[i].best;
               latlng = result.latlng;
@@ -162,7 +156,7 @@ function brew() {
             features = L.featureGroup(group).addTo(map);
             map.fitBounds(features.getBounds());
           });
-          
+
         //drawMap();
         //set search history to array
         var city = inputEl.value;
@@ -181,7 +175,7 @@ function brew() {
         let filteredSearchHistoryState = searchedStates.filter((element, index) => {
           return searchedStates.indexOf(element) === index;
         });
-        
+
         localStorage.setItem(
           "searchedCities",
           JSON.stringify(filteredSearchHistory)
@@ -190,12 +184,31 @@ function brew() {
           "searchedStates",
           JSON.stringify(filteredSearchHistoryState)
         )
-init()
-      });
+        init()
+      })
+
+
   } else {
-    alert("please enter a city");
+
+    //if city is invalid or null, popup modal
+    let popupEl = $('.popupHolder');
+    popupEl.append(` <div class="notification  is-warning"><button class="delete"></button>
+   Please enter a 
+    <strong> valid </strong>, 
+    city name.</div>`)
+
+    //clicking x removes notification:
+    $(".delete").on('click', function () {
+      $(".notification").remove()
+    })
   }
+
+
 }
+
+
+
+
 buttonEl.addEventListener("click", brew);
 
 function init() {
@@ -205,21 +218,21 @@ function init() {
   var searchedCities = data ? JSON.parse(data) : [];
   let searchedStates = dataS ? JSON.parse(dataS) : [];
 
-let historyCitiesEl = document.querySelector(".historyCities")
-historyCitiesEl.textContent ='';
+  let historyCitiesEl = document.querySelector(".historyCities")
+  historyCitiesEl.textContent = '';
 
   if (searchedCities.value !== "") {
     for (i = 0; i < searchedCities.length; i++) {
       //add .append for each index of string here
-      
+
       let divElh = document.createElement("div");
-      divElh.setAttribute('class','mx-5')
-      divElh.setAttribute('id',i)
-      divElh.setAttribute('onclick',"recall(" + i + ")")
+      divElh.setAttribute('class', 'mx-5')
+      divElh.setAttribute('id', i)
+      divElh.setAttribute('onclick', "recall(" + i + ")")
       historyCitiesEl.appendChild(divElh)
       divElh.textContent = searchedCities[i] + ", " + searchedStates[i];
 
-      divElh.addEventListener("click",function(){
+      divElh.addEventListener("click", function () {
         // console.log(this.textContent)
       })
     }
@@ -229,17 +242,17 @@ historyCitiesEl.textContent ='';
 
 init()
 
-function clearHist(){
+function clearHist() {
   let historyCitiesEl = document.querySelector(".historyCities")
-  historyCitiesEl.textContent ='';
+  historyCitiesEl.textContent = '';
   localStorage.clear();
   searchedCities = [];
 
-  }
+}
 
 
 
-function recall(x){
+function recall(x) {
 
   var tata = JSON.parse(localStorage.getItem("searchedCities"));
   let tataS = JSON.parse(localStorage.getItem('searchedStates'));
@@ -250,10 +263,10 @@ function recall(x){
   if (tata[x] !== "") {
     fetch(
       `https://api.openbrewerydb.org/v1/breweries?by_city=${tata[x]}&by_state=${tataS[x]}&per_page=50`
-     
-    ) 
+
+    )
       .then(function (response) {
-        
+
         return response.json();
       })
       .then(function (data) {
@@ -261,32 +274,32 @@ function recall(x){
           console.log(data);
 
           InitiateBreweryUI(data);
-          
+
         }
-        
+
         // getMap(data);
         var mapDrawLocations = [];
         var breweryNames = [];
         for (i = 0; i < data.length; i++) {
-          if (data[i].address_1 == null){data[i].address_1 = ""}
-          var addressConcate = data[i].address_1.replace('#','') + " " + data[i].city + " " + data[i].state;
+          if (data[i].address_1 == null) { data[i].address_1 = "" }
+          var addressConcate = data[i].address_1.replace('#', '') + " " + data[i].city + " " + data[i].state;
           mapDrawLocations.push(addressConcate.concat());
           var nameConcate = data[i].name;
           breweryNames.push(nameConcate.concat());
-          
-          inputEl.textContent = ''; 
+
+          inputEl.textContent = '';
           // mapDrawLocations.push(subArrayTwo.concat());
         }
-        
+
         console.log(mapDrawLocations);
         console.log(breweryNames);
-      
+
         //
-       
+
         MQ.geocode()
           .search(mapDrawLocations)
           .on("success", function (e) {
-           
+
 
             var results = e.result,
               html = "",
@@ -301,12 +314,12 @@ function recall(x){
               map,
               r,
               i;
-              
+
             map = L.map("map", {
-              
+
               layers: MQ.mapLayer(),
             });
-           
+
             for (i = 0; i < results.length; i++) {
               result = results[i].best;
               latlng = result.latlng;
@@ -344,12 +357,11 @@ function recall(x){
             features = L.featureGroup(group).addTo(map);
             map.fitBounds(features.getBounds());
           });
- 
-init()
+
+        init()
       });
   }
 }
-
 
 
 
