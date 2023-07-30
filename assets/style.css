@@ -1,7 +1,10 @@
 body {
-    background-image: url(./pexels-photo-1267700.webp);
-    min-height: 100vh;
-    background-position: center;
-    background-size: cover;
+  background-image: url(./pexels-photo-1267700.webp);
+  min-height: 100vh;
+  background-position: center;
+  background-size: cover;
 }
 
+.mx-5:hover {
+  cursor: pointer;
+}

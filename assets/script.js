@@ -1,11 +1,10 @@
 const MAP_API_KEY = "Z2Olh8AiDpkye0o27ii8yHGpfXPmDkci";
 let buttonEl = document.querySelector(".button");
 let inputEl = document.querySelector(".textinput");
-let dropDownEl = document.querySelector(".ddstate")
+let dropDownEl = document.querySelector(".ddstate");
 let loc = "";
 let searchedCities = [];
-let mapEl = document.querySelector('#map');
-
+let mapEl = document.querySelector("#map");
 
 function InitiateBreweryUI(data) {
   const brewerySectionDiv = $("#brewerySection");
@@ -24,9 +23,15 @@ function InitiateBreweryUI(data) {
               <p>
                 <strong>${data[i].name}</strong>
                 <br />
-              <div id="brew">Street: ${data[i].street ? data[i].street : "Unavaliable"}</div>
+              <div id="brew">Street: ${
+                data[i].street ? data[i].street : "Unavaliable"
+              }</div>
               </p>
-              <a href=${data[i].website_url ? data[i].website_url : ""}>Website: ${data[i].website_url ? data[i].website_url : "Unavaliable"}</a>
+              <a href=${
+                data[i].website_url ? data[i].website_url : ""
+              }>Website: ${
+      data[i].website_url ? data[i].website_url : "Unavaliable"
+    }</a>
             </div>
             <div class="media-right">
               <section class="image is-128x128">
@@ -35,37 +40,33 @@ function InitiateBreweryUI(data) {
             </div>
         </article>
       </div>
-    `)
+    `);
   }
 }
 
 function brew() {
-
-
   if (inputEl.value !== "") {
     fetch(
       `https://api.openbrewerydb.org/v1/breweries?by_city=${inputEl.value}&by_state=${dropDownEl.value}&per_page=50`
-
     )
       .then(function (response) {
-
         return response.json();
       })
       .then(function (data) {
-console.log(data)
+        console.log(data);
         //if the search returns nothing, warning modal
         if (data.length == 0) {
-          console.log('hi')
-          let popupEl = $('.popupHolder');
+          console.log("hi");
+          let popupEl = $(".popupHolder");
           popupEl.append(` <div class="notification  is-warning"><button class="delete"></button>
          Please enter a 
           <strong> valid </strong>, 
-          city name.</div>`)
+          city name.</div>`);
 
           //clicking x removes notification:
-          $(".delete").on('click', function () {
-            $(".notification").remove()
-          })
+          $(".delete").on("click", function () {
+            $(".notification").remove();
+          });
           return;
         }
         if (data) {
@@ -76,20 +77,37 @@ console.log(data)
         var mapDrawLocations = [];
         var breweryNames = [];
         for (i = 0; i < data.length; i++) {
-          if (data[i].address_1 == null) { data[i].address_1 = "" }
-          var addressConcate = data[i].address_1.replace('#', '') + " " + data[i].city + " " + data[i].state;
+          if (data[i].address_1 == null) {
+            data[i].address_1 = "";
+          }
+          var addressConcate =
+            data[i].address_1.replace("#", "") +
+            " " +
+            data[i].city +
+            " " +
+            data[i].state;
           mapDrawLocations.push(addressConcate.concat());
           var nameConcate = data[i].name;
           breweryNames.push(nameConcate.concat());
 
-          inputEl.textContent = '';
+          inputEl.textContent = "";
           // mapDrawLocations.push(subArrayTwo.concat());
         }
+        function initializingMap() {
+          var container = L.DomUtil.get("map");
+          if (container != null) {
+            map.remove();
+            let mapcontElh = document.getElementById("mapcontainer");
+            let mapElh = document.createElement("div");
+            mapElh.setAttribute("style", "width: 100%; height:530px;");
+            mapElh.setAttribute("id", "map");
+            mapcontElh.appendChild(mapElh);
+          }
+        }
+        initializingMap();
         MQ.geocode()
           .search(mapDrawLocations)
           .on("success", function (e) {
-
-
             var results = e.result,
               html = "",
               group = [],
@@ -105,7 +123,6 @@ console.log(data)
               i;
 
             map = L.map("map", {
-
               layers: MQ.mapLayer(),
             });
 
@@ -146,14 +163,12 @@ console.log(data)
             features = L.featureGroup(group).addTo(map);
             map.fitBounds(features.getBounds());
           });
-
-        //drawMap();
         //set search history to array
         var city = inputEl.value;
         let state = dropDownEl.value;
         // console.log(city);
         var data = localStorage.getItem("searchedCities");
-        let dataS = localStorage.getItem("searchedStates")
+        let dataS = localStorage.getItem("searchedStates");
         var searchedCities = data ? JSON.parse(data) : [];
         let searchedStates = dataS ? JSON.parse(dataS) : [];
         searchedCities.push(city);
@@ -162,9 +177,11 @@ console.log(data)
         let filteredSearchHistory = searchedCities.filter((element, index) => {
           return searchedCities.indexOf(element) === index;
         });
-        let filteredSearchHistoryState = searchedStates.filter((element, index) => {
-          return searchedStates.indexOf(element) === index;
-        });
+        let filteredSearchHistoryState = searchedStates.filter(
+          (element, index) => {
+            return searchedStates.indexOf(element) === index;
+          }
+        );
 
         localStorage.setItem(
           "searchedCities",
@@ -173,90 +190,75 @@ console.log(data)
         localStorage.setItem(
           "searchedStates",
           JSON.stringify(filteredSearchHistoryState)
-        )
-        init()
-      })
-
-
+        );
+        init();
+      });
   } else {
-
     //if city is invalid or null, popup modal
-    let popupEl = $('.popupHolder');
+    let popupEl = $(".popupHolder");
     popupEl.append(` <div class="notification  is-warning"><button class="delete"></button>
    Please enter a 
     <strong> valid </strong>, 
-    city name.</div>`)
+    city name.</div>`);
 
     //clicking x removes notification:
-    $(".delete").on('click', function () {
-      $(".notification").remove()
-    })
+    $(".delete").on("click", function () {
+      $(".notification").remove();
+    });
   }
-
-
 }
-
-
-
 
 buttonEl.addEventListener("click", brew);
 
 function init() {
   // load search history on page load
   var data = localStorage.getItem("searchedCities");
-  let dataS = localStorage.getItem('searchedStates');
+  let dataS = localStorage.getItem("searchedStates");
   var searchedCities = data ? JSON.parse(data) : [];
   let searchedStates = dataS ? JSON.parse(dataS) : [];
 
-  let historyCitiesEl = document.querySelector(".historyCities")
-  historyCitiesEl.textContent = '';
+  let historyCitiesEl = document.querySelector(".historyCities");
+  historyCitiesEl.textContent = "";
 
   if (searchedCities.value !== "") {
     for (i = 0; i < searchedCities.length; i++) {
       //add .append for each index of string here
 
       let divElh = document.createElement("div");
-      divElh.setAttribute('class', 'mx-5')
-      divElh.setAttribute('id', i)
-      divElh.setAttribute('onclick', "recall(" + i + ")")
-      historyCitiesEl.appendChild(divElh)
+      divElh.setAttribute("class", "mx-5");
+      divElh.setAttribute("id", i);
+      divElh.setAttribute("style", "text-transform: capitalize");
+      divElh.setAttribute("onclick", "recall(" + i + ")");
+      historyCitiesEl.appendChild(divElh);
       divElh.textContent = searchedCities[i] + ", " + searchedStates[i];
 
       divElh.addEventListener("click", function () {
         // console.log(this.textContent)
-      })
+      });
     }
   }
-
 }
 
-init()
+init();
 
 function clearHist() {
-  let historyCitiesEl = document.querySelector(".historyCities")
-  historyCitiesEl.textContent = '';
+  let historyCitiesEl = document.querySelector(".historyCities");
+  historyCitiesEl.textContent = "";
   localStorage.clear();
   searchedCities = [];
-
 }
 
-
-
 function recall(x) {
-
   var tata = JSON.parse(localStorage.getItem("searchedCities"));
-  let tataS = JSON.parse(localStorage.getItem('searchedStates'));
-  console.log(tata[x])
-  console.log(tataS[x])
-
+  let tataS = JSON.parse(localStorage.getItem("searchedStates"));
+  console.log(tata[x]);
+  console.log(tataS[x]);
 
   if (tata[x] !== "") {
     fetch(
       `https://api.openbrewerydb.org/v1/breweries?by_city=${tata[x]}&by_state=${tataS[x]}&per_page=50`
-
     )
       .then(function (response) {
-
         return response.json();
       })
       .then(function (data) {
@@ -264,33 +266,46 @@ function recall(x) {
           console.log(data);
 
           InitiateBreweryUI(data);
-
         }
 
         // getMap(data);
         var mapDrawLocations = [];
         var breweryNames = [];
         for (i = 0; i < data.length; i++) {
-          if (data[i].address_1 == null) { data[i].address_1 = "" }
-          var addressConcate = data[i].address_1.replace('#', '') + " " + data[i].city + " " + data[i].state;
+          if (data[i].address_1 == null) {
+            data[i].address_1 = "";
+          }
+          var addressConcate =
+            data[i].address_1.replace("#", "") +
+            " " +
+            data[i].city +
+            " " +
+            data[i].state;
           mapDrawLocations.push(addressConcate.concat());
           var nameConcate = data[i].name;
           breweryNames.push(nameConcate.concat());
 
-          inputEl.textContent = '';
-          // mapDrawLocations.push(subArrayTwo.concat());
+          inputEl.textContent = "";
         }
 
         console.log(mapDrawLocations);
         console.log(breweryNames);
 
-        //
-
+        function initializingMap() {
+          var container = L.DomUtil.get("map");
+          if (container != null) {
+            map.remove();
+            let mapcontElh = document.getElementById("mapcontainer");
+            let mapElh = document.createElement("div");
+            mapElh.setAttribute("style", "width: 100%; height:530px;");
+            mapElh.setAttribute("id", "map");
+            mapcontElh.appendChild(mapElh);
+          }
+        }
+        initializingMap();
         MQ.geocode()
           .search(mapDrawLocations)
           .on("success", function (e) {
-
-
             var results = e.result,
               html = "",
               group = [],
@@ -306,7 +321,6 @@ function recall(x) {
               i;
 
             map = L.map("map", {
-
               layers: MQ.mapLayer(),
             });
 
@@ -348,11 +362,7 @@ function recall(x) {
             map.fitBounds(features.getBounds());
           });
 
-        init()
+        init();
       });
   }
 }
-
-
-
-
