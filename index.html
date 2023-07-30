@@ -8,92 +8,106 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
   <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=Z2Olh8AiDpkye0o27ii8yHGpfXPmDkci"></script>
-  <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-geocoding.js?key=Z2Olh8AiDpkye0o27ii8yHGpfXPmDkci"></script>
+  <script
+    src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-geocoding.js?key=Z2Olh8AiDpkye0o27ii8yHGpfXPmDkci"></script>
 
 </head>
 
 <body>
+  <div class="popupHolder">
+
+  </div>
+   
+  
   <header class="">
-    <nav class="breadcrumb is-right" aria-label="breadcrumbs">
+    <nav class="is-right" aria-label="breadcrumbs">
+      <div class="is-flex is-justify-content-left">
+        <div class="box m-5 p-1" onclick="clearHist()">Clear History</div>
+      </div>
       <ul class="historyCities is-flex is-justify-content-left">
-        <!-- <div id="history"></div> -->
+
       </ul>
+
     </nav>
     <div>
       <h1 class="title is-1 columns is-centered m-5">Brew-Loc</h1>
     </div>
   </header>
- 
 
 
-    <section class="columns is-centered m-6 has-text-centered">
-      <div class="dropdown">
-        <select class="ddstate">
-          <option value="alabama">Alabama</option>
-          <option value="alaska">Alaska</option>
-          <option value="arizona">Arizona</option>
-          <option value="arkansas">Arkansas</option>
-          <option value="california">California</option>
-          <option value="colorado">Colorado</option>
-          <option value="connecticut">Connecticut</option>
-          <option value="delaware">Delaware</option>
-          <option value="district_of_columbia">District Of Columbia</option>
-          <option value="florida">Florida</option>
-          <option value="georgia">Georgia</option>
-          <option value="hawaii">Hawaii</option>
-          <option value="idaho">Idaho</option>
-          <option value="illinois">Illinois</option>
-          <option value="indiana">Indiana</option>
-          <option value="iowa">Iowa</option>
-          <option value="kansas">Kansas</option>
-          <option value="kentucky">Kentucky</option>
-          <option value="louisiana">Louisiana</option>
-          <option value="maine">Maine</option>
-          <option value="maryland">Maryland</option>
-          <option value="massachusetts">Massachusetts</option>
-          <option value="michigan">Michigan</option>
-          <option value="minnesota">Minnesota</option>
-          <option value="mississippi">Mississippi</option>
-          <option value="missouri">Missouri</option>
-          <option value="montana">Montana</option>
-          <option value="nebraska">Nebraska</option>
-          <option value="nevada">Nevada</option>
-          <option value="new_hampshire">New Hampshire</option>
-          <option value="new_jersey">New Jersey</option>
-          <option value="new_mexico">New Mexico</option>
-          <option value="new_york">New York</option>
-          <option value="north_carolina">North Carolina</option>
-          <option value="north_dakota">North Dakota</option>
-          <option value="ohio">Ohio</option>
-          <option value="oklahoma">Oklahoma</option>
-          <option value="oregon">Oregon</option>
-          <option value="pennsylvaina">Pennsylvania</option>
-          <option value="rhode_island">Rhode Island</option>
-          <option value="south_carolina">South Carolina</option>
-          <option value="south_dakota">South Dakota</option>
-          <option value="tennessee">Tennessee</option>
-          <option value="texas">Texas</option>
-          <option value="utah">Utah</option>
-          <option value="vermont">Vermont</option>
-          <option value="virginia">Virginia</option>
-          <option value="washington">Washington</option>
-          <option value="west_virginia">West Virginia</option>
-          <option value="wisconsin">Wisconsin</option>
-          <option value="wyoming">Wyoming</option>
-        </select>
-      </div>
-      <input class="textinput " placeholder="Type your City"></input>
-      <button class="button" type="submit" value="Submit">SUBMIT</button>
-    </section>
-    <div id='map' style='width: 100%; height:530px;'></div>
-    <img id="bigSingleMap" class="columns is-centered">
-    </img>
-    <div id="brewerySection">
+
+  <section class="columns is-centered m-6 has-text-centered">
+    <div class="dropdown">
+      <select class="ddstate">
+        <option value="alabama">Alabama</option>
+        <option value="alaska">Alaska</option>
+        <option value="arizona">Arizona</option>
+        <option value="arkansas">Arkansas</option>
+        <option value="california">California</option>
+        <option value="colorado">Colorado</option>
+        <option value="connecticut">Connecticut</option>
+        <option value="delaware">Delaware</option>
+        <option value="district_of_columbia">District Of Columbia</option>
+        <option value="florida">Florida</option>
+        <option value="georgia">Georgia</option>
+        <option value="hawaii">Hawaii</option>
+        <option value="idaho">Idaho</option>
+        <option value="illinois">Illinois</option>
+        <option value="indiana">Indiana</option>
+        <option value="iowa">Iowa</option>
+        <option value="kansas">Kansas</option>
+        <option value="kentucky">Kentucky</option>
+        <option value="louisiana">Louisiana</option>
+        <option value="maine">Maine</option>
+        <option value="maryland">Maryland</option>
+        <option value="massachusetts">Massachusetts</option>
+        <option value="michigan">Michigan</option>
+        <option value="minnesota">Minnesota</option>
+        <option value="mississippi">Mississippi</option>
+        <option value="missouri">Missouri</option>
+        <option value="montana">Montana</option>
+        <option value="nebraska">Nebraska</option>
+        <option value="nevada">Nevada</option>
+        <option value="new_hampshire">New Hampshire</option>
+        <option value="new_jersey">New Jersey</option>
+        <option value="new_mexico">New Mexico</option>
+        <option value="new_york">New York</option>
+        <option value="north_carolina">North Carolina</option>
+        <option value="north_dakota">North Dakota</option>
+        <option value="ohio">Ohio</option>
+        <option value="oklahoma">Oklahoma</option>
+        <option value="oregon">Oregon</option>
+        <option value="pennsylvaina">Pennsylvania</option>
+        <option value="rhode_island">Rhode Island</option>
+        <option value="south_carolina">South Carolina</option>
+        <option value="south_dakota">South Dakota</option>
+        <option value="tennessee">Tennessee</option>
+        <option value="texas">Texas</option>
+        <option value="utah">Utah</option>
+        <option value="vermont">Vermont</option>
+        <option value="virginia">Virginia</option>
+        <option value="washington">Washington</option>
+        <option value="west_virginia">West Virginia</option>
+        <option value="wisconsin">Wisconsin</option>
+        <option value="wyoming">Wyoming</option>
+      </select>
     </div>
-  
-    <script src="assets/script.js"></script>
+    <input class="textinput mx-2" placeholder="Type your City"></input>
+    <button class="button" type="submit" value="Submit">SUBMIT</button>
+  </section>
+  <div id='map' style='width: 100%; height:530px;'></div>
+  <img id="bigSingleMap" class="columns is-centered">
+  </img>
+  <div id="brewerySection">
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+  <script src="assets/script.js"></script>
+
+
 </body>
 
 </html>
