@@ -7,8 +7,22 @@ let searchedCities = [];
 let mapEl = document.querySelector("#map");
 
 function InitiateBreweryUI(data) {
-  const brewerySectionDiv = $("#brewerySection");
+ 
+  // clear results before populating
+  function initializingResults() {
 
+    const list = document.getElementById("brewerySection");
+    debugger
+    if (list !== null) {
+      while (list.hasChildNodes()) {
+        list.removeChild(list.firstChild);
+      }
+    }
+  }
+  initializingResults()
+  
+  const brewerySectionDiv = $("#brewerySection");
+  console.log(brewerySectionDiv)
   for (i = 0; i < data.length; i++) {
     brewerySectionDiv.append(`
       <div class="box">
@@ -23,15 +37,12 @@ function InitiateBreweryUI(data) {
               <p>
                 <strong>${data[i].name}</strong>
                 <br />
-              <div id="brew">Street: ${
-                data[i].street ? data[i].street : "Unavaliable"
-              }</div>
+              <div id="brew">Street: ${data[i].street ? data[i].street : "Unavaliable"
+      }</div>
               </p>
-              <a href=${
-                data[i].website_url ? data[i].website_url : ""
-              }>Website: ${
-      data[i].website_url ? data[i].website_url : "Unavaliable"
-    }</a>
+              <a href=${data[i].website_url ? data[i].website_url : ""
+      }>Website: ${data[i].website_url ? data[i].website_url : "Unavaliable"
+      }</a>
             </div>
             <div class="media-right">
               <section class="image is-128x128">
@@ -104,6 +115,7 @@ function brew() {
             mapcontElh.appendChild(mapElh);
           }
         }
+
         initializingMap();
         MQ.geocode()
           .search(mapDrawLocations)
