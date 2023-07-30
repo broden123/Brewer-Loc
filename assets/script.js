@@ -22,11 +22,11 @@ function InitiateBreweryUI(data) {
           <div class="media-content">
             <div class="content">
               <p>
-                <strong>Name: ${data[i].name}</strong>
+                <strong>${data[i].name}</strong>
                 <br />
-              <div id="brew">Street: ${data[i].street ? data[i].street : "Unavaliable"
-      }</div>
+              <div id="brew">Street: ${data[i].street ? data[i].street : "Unavaliable"}</div>
               </p>
+              <a href=${data[i].website_url ? data[i].website_url : ""}>Website: ${data[i].website_url ? data[i].website_url : "Unavaliable"}</a>
             </div>
             <div class="media-right">
               <section class="image is-128x128">
@@ -52,7 +52,7 @@ function brew() {
         return response.json();
       })
       .then(function (data) {
-
+console.log(data)
         //if the search returns nothing, warning modal
         if (data.length == 0) {
           console.log('hi')
@@ -68,12 +68,8 @@ function brew() {
           })
           return;
         }
-
         if (data) {
-          // console.log(data);
-
           InitiateBreweryUI(data);
-
         }
 
         // getMap(data);
@@ -89,12 +85,6 @@ function brew() {
           inputEl.textContent = '';
           // mapDrawLocations.push(subArrayTwo.concat());
         }
-
-        // console.log(mapDrawLocations);
-        // console.log(breweryNames);
-
-        //
-
         MQ.geocode()
           .search(mapDrawLocations)
           .on("success", function (e) {
