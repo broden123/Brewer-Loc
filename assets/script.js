@@ -12,7 +12,7 @@ function InitiateBreweryUI(data) {
   function initializingResults() {
 
     const list = document.getElementById("brewerySection");
-    debugger
+    
     if (list !== null) {
       while (list.hasChildNodes()) {
         list.removeChild(list.firstChild);
@@ -28,9 +28,6 @@ function InitiateBreweryUI(data) {
       <div class="box">
         <article class="media">
           <div class="media-left">
-            <section class="image is-48x48">
-              <img src="/assets/pexels-photo-1267700.webp" alt="beer beer-icon" />
-            </section>
           </div>
           <div class="media-content">
             <div class="content">
@@ -235,7 +232,6 @@ function init() {
   if (searchedCities.value !== "") {
     for (i = 0; i < searchedCities.length; i++) {
       //add .append for each index of string here
-
       let divElh = document.createElement("div");
       divElh.setAttribute("class", "mx-5");
       divElh.setAttribute("id", i);
