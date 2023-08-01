@@ -61,14 +61,13 @@ function brew() {
         return response.json();
       })
       .then(function (data) {
+        console.log(data);
         //if the search returns nothing, warning modal
         if (data.length == 0) {
           console.log("hi");
           let popupEl = $(".popupHolder");
           popupEl.append(` <div class="notification  is-warning"><button class="delete"></button>
-         Please enter a 
-          <strong> valid </strong>, 
-          city name.</div>`);
+         Please enter a valid city name.</div>`);
 
           //clicking x removes notification:
           $(".delete").on("click", function () {
@@ -98,7 +97,6 @@ function brew() {
           breweryNames.push(nameConcate.concat());
 
           inputEl.textContent = "";
-          // mapDrawLocations.push(subArrayTwo.concat());
         }
         function initializingMap() {
           var container = L.DomUtil.get("map");
@@ -192,9 +190,7 @@ function brew() {
     //if city is invalid or null, popup modal
     let popupEl = $(".popupHolder");
     popupEl.append(` <div class="notification  is-warning"><button class="delete"></button>
-   Please enter a 
-    <strong> valid </strong>, 
-    city name.</div>`);
+   Please enter a valid city name.</div>`);
 
     //clicking x removes notification:
     $(".delete").on("click", function () {
