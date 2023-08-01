@@ -18,7 +18,7 @@ function InitiateBreweryUI(data) {
     }
   }
   initializingResults();
-
+// These are boxes that store brewery name, address (if avaliable), and website(if avaliable)
   const brewerySectionDiv = $("#brewerySection");
   for (i = 0; i < data.length; i++) {
     brewerySectionDiv.append(`
@@ -27,25 +27,20 @@ function InitiateBreweryUI(data) {
           <div class="media-left">
           </div>
           <div class="media-content">
-            <div class="content">
+            <div class="content has-text-light has-text-centered">
               <p>
-                <strong>${data[i].name}</strong>
+                <strong class="has-text-light ">${data[i].name}</strong>
                 <br />
               <div id="brew">Street: ${
                 data[i].street ? data[i].street : "Unavaliable"
               }</div>
               </p>
-              <a href=${
+              <a class="has-text-light" href=${
                 data[i].website_url ? data[i].website_url : ""
               }>Website: ${
       data[i].website_url ? data[i].website_url : "Unavaliable"
     }</a>
-            </div>
-            <div class="media-right">
-              <section class="image is-128x128">
-                <img id="image${i}" src="" alt="">
-              </section>
-            </div>
+
         </article>
       </div>
     `);
@@ -61,13 +56,14 @@ function brew() {
         return response.json();
       })
       .then(function (data) {
-        console.log(data);
         //if the search returns nothing, warning modal
         if (data.length == 0) {
           console.log("hi");
           let popupEl = $(".popupHolder");
           popupEl.append(` <div class="notification  is-warning"><button class="delete"></button>
-         Please enter a valid city name.</div>`);
+         Please enter a 
+          <strong> valid </strong>, 
+          city name.</div>`);
 
           //clicking x removes notification:
           $(".delete").on("click", function () {
@@ -97,6 +93,7 @@ function brew() {
           breweryNames.push(nameConcate.concat());
 
           inputEl.textContent = "";
+          // mapDrawLocations.push(subArrayTwo.concat());
         }
         function initializingMap() {
           var container = L.DomUtil.get("map");
@@ -190,7 +187,9 @@ function brew() {
     //if city is invalid or null, popup modal
     let popupEl = $(".popupHolder");
     popupEl.append(` <div class="notification  is-warning"><button class="delete"></button>
-   Please enter a valid city name.</div>`);
+   Please enter a 
+    <strong> valid </strong>, 
+    city name.</div>`);
 
     //clicking x removes notification:
     $(".delete").on("click", function () {
@@ -213,7 +212,7 @@ function init() {
     for (i = 0; i < searchedCities.length; i++) {
       //add .append for each index of string here
       let divElh = document.createElement("div");
-      divElh.setAttribute("class", "mx-5 has-text-black-bis is-size-5 ");
+      divElh.setAttribute("class", "box is-inline-block mx-5 has-text-light has-background-dark p-1 is-size-5");
       divElh.setAttribute("id", i);
       divElh.setAttribute("style", "text-transform: capitalize");
       divElh.setAttribute("onclick", "recall(" + i + ")");
