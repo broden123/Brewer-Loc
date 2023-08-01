@@ -7,22 +7,18 @@ let searchedCities = [];
 let mapEl = document.querySelector("#map");
 
 function InitiateBreweryUI(data) {
- 
   // clear results before populating
   function initializingResults() {
-
     const list = document.getElementById("brewerySection");
-    debugger
     if (list !== null) {
       while (list.hasChildNodes()) {
         list.removeChild(list.firstChild);
       }
     }
   }
-  initializingResults()
-  
+  initializingResults();
+
   const brewerySectionDiv = $("#brewerySection");
-  console.log(brewerySectionDiv)
   for (i = 0; i < data.length; i++) {
     brewerySectionDiv.append(`
       <div class="box">
@@ -37,12 +33,15 @@ function InitiateBreweryUI(data) {
               <p>
                 <strong>${data[i].name}</strong>
                 <br />
-              <div id="brew">Street: ${data[i].street ? data[i].street : "Unavaliable"
-      }</div>
+              <div id="brew">Street: ${
+                data[i].street ? data[i].street : "Unavaliable"
+              }</div>
               </p>
-              <a href=${data[i].website_url ? data[i].website_url : ""
-      }>Website: ${data[i].website_url ? data[i].website_url : "Unavaliable"
-      }</a>
+              <a href=${
+                data[i].website_url ? data[i].website_url : ""
+              }>Website: ${
+      data[i].website_url ? data[i].website_url : "Unavaliable"
+    }</a>
             </div>
             <div class="media-right">
               <section class="image is-128x128">
@@ -64,7 +63,6 @@ function brew() {
         return response.json();
       })
       .then(function (data) {
-        console.log(data);
         //if the search returns nothing, warning modal
         if (data.length == 0) {
           console.log("hi");
@@ -178,30 +176,17 @@ function brew() {
         //set search history to array
         var city = inputEl.value;
         let state = dropDownEl.value;
-        // console.log(city);
         var data = localStorage.getItem("searchedCities");
-        let dataS = localStorage.getItem("searchedStates");
         var searchedCities = data ? JSON.parse(data) : [];
-        let searchedStates = dataS ? JSON.parse(dataS) : [];
-        searchedCities.push(city);
-        searchedStates.push(state);
+        searchedCities.push(city + ", " + state);
         //filter search history to prevent duplicates then set to local storage
         let filteredSearchHistory = searchedCities.filter((element, index) => {
           return searchedCities.indexOf(element) === index;
         });
-        let filteredSearchHistoryState = searchedStates.filter(
-          (element, index) => {
-            return searchedStates.indexOf(element) === index;
-          }
-        );
 
         localStorage.setItem(
           "searchedCities",
           JSON.stringify(filteredSearchHistory)
-        );
-        localStorage.setItem(
-          "searchedStates",
-          JSON.stringify(filteredSearchHistoryState)
         );
         init();
       });
@@ -225,9 +210,7 @@ buttonEl.addEventListener("click", brew);
 function init() {
   // load search history on page load
   var data = localStorage.getItem("searchedCities");
-  let dataS = localStorage.getItem("searchedStates");
   var searchedCities = data ? JSON.parse(data) : [];
-  let searchedStates = dataS ? JSON.parse(dataS) : [];
 
   let historyCitiesEl = document.querySelector(".historyCities");
   historyCitiesEl.textContent = "";
@@ -242,7 +225,7 @@ function init() {
       divElh.setAttribute("style", "text-transform: capitalize");
       divElh.setAttribute("onclick", "recall(" + i + ")");
       historyCitiesEl.appendChild(divElh);
-      divElh.textContent = searchedCities[i] + ", " + searchedStates[i];
+      divElh.textContent = searchedCities[i];
 
       divElh.addEventListener("click", function () {
         // console.log(this.textContent)
@@ -261,14 +244,17 @@ function clearHist() {
 }
 
 function recall(x) {
-  var tata = JSON.parse(localStorage.getItem("searchedCities"));
-  let tataS = JSON.parse(localStorage.getItem("searchedStates"));
-  console.log(tata[x]);
-  console.log(tataS[x]);
+  let tata = JSON.parse(localStorage.getItem("searchedCities"));
+  let tataA = tata[x];
+  let tataB = tataA.toString();
+  let tataC = tataB.replace(",", "");
+  let tataD = tataC.split(" ");
+  let tataE = tataD[0];
+  let tataF = tataD[1];
 
-  if (tata[x] !== "") {
+  if (tataC !== "") {
     fetch(
-      `https://api.openbrewerydb.org/v1/breweries?by_city=${tata[x]}&by_state=${tataS[x]}&per_page=50`
+      `https://api.openbrewerydb.org/v1/breweries?by_city=${tataE}&by_state=${tataF}&per_page=50`
     )
       .then(function (response) {
         return response.json();
@@ -280,7 +266,6 @@ function recall(x) {
           InitiateBreweryUI(data);
         }
 
-        // getMap(data);
         var mapDrawLocations = [];
         var breweryNames = [];
         for (i = 0; i < data.length; i++) {
@@ -299,9 +284,6 @@ function recall(x) {
 
           inputEl.textContent = "";
         }
-
-        console.log(mapDrawLocations);
-        console.log(breweryNames);
 
         function initializingMap() {
           var container = L.DomUtil.get("map");
