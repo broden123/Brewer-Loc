@@ -8,3 +8,16 @@ body {
 .mx-5:hover {
   cursor: pointer;
 }
+
+.article-container {
+    background-image: url(./pexels-elevate-1267359.jpg);
+    background-size: cover;
+    background-position: center;
+
+}
+
+.media, strong{
+color: white;
+font-size: 35px;
+
+}

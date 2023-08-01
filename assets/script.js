@@ -22,7 +22,7 @@ function InitiateBreweryUI(data) {
   const brewerySectionDiv = $("#brewerySection");
   for (i = 0; i < data.length; i++) {
     brewerySectionDiv.append(`
-      <div class="box">
+      <div class="box article-container">
         <article class="media">
           <div class="media-left">
           </div>
@@ -217,7 +217,7 @@ function init() {
     for (i = 0; i < searchedCities.length; i++) {
       //add .append for each index of string here
       let divElh = document.createElement("div");
-      divElh.setAttribute("class", "mx-5");
+      divElh.setAttribute("class", "mx-5 has-text-black-bis is-size-5 ");
       divElh.setAttribute("id", i);
       divElh.setAttribute("style", "text-transform: capitalize");
       divElh.setAttribute("onclick", "recall(" + i + ")");
