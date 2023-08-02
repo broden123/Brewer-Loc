@@ -18,7 +18,7 @@ function InitiateBreweryUI(data) {
     }
   }
   initializingResults();
-// These are boxes that store brewery name, address (if avaliable), and website(if avaliable)
+  // These are boxes that store brewery name, address (if avaliable), and website(if avaliable)
   const brewerySectionDiv = $("#brewerySection");
   for (i = 0; i < data.length; i++) {
     brewerySectionDiv.append(`
@@ -31,15 +31,12 @@ function InitiateBreweryUI(data) {
               <p>
                 <strong class="has-text-light ">${data[i].name}</strong>
                 <br />
-              <div id="brew">Street: ${
-                data[i].street ? data[i].street : "Unavaliable"
-              }</div>
+              <div id="brew">Street: ${data[i].street ? data[i].street : "Unavaliable"
+      }</div>
               </p>
-              <a class="has-text-light" href=${
-                data[i].website_url ? data[i].website_url : ""
-              }>Website: ${
-      data[i].website_url ? data[i].website_url : "Unavaliable"
-    }</a>
+              <a class="has-text-light" href=${data[i].website_url ? data[i].website_url : ""
+      }>Website: ${data[i].website_url ? data[i].website_url : "Unavaliable"
+      }</a>
 
         </article>
       </div>
@@ -50,6 +47,7 @@ function InitiateBreweryUI(data) {
 function brew() {
   if (inputEl.value !== "") {
     fetch(
+
       `https://api.openbrewerydb.org/v1/breweries?by_city=${inputEl.value}&by_state=${dropDownEl.value}&per_page=50`
     )
       .then(function (response) {
@@ -58,7 +56,6 @@ function brew() {
       .then(function (data) {
         //if the search returns nothing, warning modal
         if (data.length == 0) {
-          console.log("hi");
           let popupEl = $(".popupHolder");
           popupEl.append(` <div class="notification  is-warning"><button class="delete"></button>
          Please enter a 
@@ -75,15 +72,20 @@ function brew() {
           InitiateBreweryUI(data);
         }
 
-        // getMap(data);
+        // getMap(data); also replaces certain characters in addresses with ""
         var mapDrawLocations = [];
         var breweryNames = [];
         for (i = 0; i < data.length; i++) {
           if (data[i].address_1 == null) {
             data[i].address_1 = "";
           }
+          function sanitize (string) {
+            let san1 = string.replace("#","")
+            let san2 = san1.replace("&", "")
+            return san2;
+          }
           var addressConcate =
-            data[i].address_1.replace("#", "") +
+            sanitize(data[i].address_1) +
             " " +
             data[i].city +
             " " +
@@ -220,7 +222,7 @@ function init() {
       divElh.textContent = searchedCities[i];
 
       divElh.addEventListener("click", function () {
-        // console.log(this.textContent)
+        
       });
     }
   }
@@ -237,23 +239,26 @@ function clearHist() {
 
 function recall(x) {
   let tata = JSON.parse(localStorage.getItem("searchedCities"));
+  
+  
   let tataA = tata[x];
   let tataB = tataA.toString();
-  let tataC = tataB.replace(",", "");
-  let tataD = tataC.split(" ");
-  let tataE = tataD[0];
-  let tataF = tataD[1];
+  let tataC = tataB.replace(", ", "|")
+  let tataD = tataC.replace("_", " ")
+
+  let tataE = tataD.split("|");
 
   if (tataC !== "") {
+    
     fetch(
-      `https://api.openbrewerydb.org/v1/breweries?by_city=${tataE}&by_state=${tataF}&per_page=50`
+      `https://api.openbrewerydb.org/v1/breweries?by_city=${tataE[0]}&by_state=${tataE[1]}&per_page=50`
     )
       .then(function (response) {
         return response.json();
       })
       .then(function (data) {
         if (data) {
-          console.log(data);
+          
 
           InitiateBreweryUI(data);
         }
@@ -264,8 +269,14 @@ function recall(x) {
           if (data[i].address_1 == null) {
             data[i].address_1 = "";
           }
+          function sanitize (string) {
+
+            let san1 = string.replace("#","")
+            let san2 = san1.replace("&", "")
+            return san2;
+          }
           var addressConcate =
-            data[i].address_1.replace("#", "") +
+            sanitize(data[i].address_1) +
             " " +
             data[i].city +
             " " +
